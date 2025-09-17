@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인사이트 부동산 - 임장 관리 시스템</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 헤더 스타일 */
+        .header {
+            background-color: #fff;
+            border-bottom: 2px solid #ddd;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+            border: 1px solid #2563eb;
+        }
+
+        .notification-icon {
+            font-size: 18px;
+            color: #666;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* 메인 컨텐츠 */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .hero h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .highlight {
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        .brand {
+            color: #2563eb;
+            font-weight: 700;
+        }
+
+        /* 기능 아이콘 그리드 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 15px 10px;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+
+        .feature-icon:hover {
+            background-color: #e3f2fd;
+            border-color: #90caf9;
+        }
+
+        .feature-icon i {
+            font-size: 28px;
+            color: #495057;
+            transition: color 0.3s ease;
+        }
+
+        .feature-icon:hover i {
+            color: #1976d2;
+        }
+
+        .feature-item span {
+            font-size: 13px;
+            color: #495057;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* 대시보드 섹션 */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .dashboard-left h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* 통계 카드 그리드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card.primary {
+            background: #2563eb;
+            border-color: #1d4ed8;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .stat-card.primary .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .stat-card.primary .stat-value {
+            color: white;
+        }
+
+        /* 매물 목록 */
+        .property-list {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .property-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .property-item {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .property-item:last-child {
+            border-bottom: none;
+        }
+
+        .property-address {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .status-badge.sold {
+            background-color: #10b981;
+        }
+
+        .property-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-badge {
+            background-color: #ef4444;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .price {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .property-views,
+        .property-response {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 사용자 정보 박스 */
+        .user-info {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: #e5e7eb;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar i {
+            font-size: 20px;
+            color: #666;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-status i {
+            color: #fbbf24;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+        }
+
+        .user-company {
+            margin-bottom: 20px;
+        }
+
+        .company-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .company-info .label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .company-info .value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .monthly-stats {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .stats-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .stats-header .count {
+            background: #2563eb;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .stats-header i {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .notice {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* 페이지 관리 */
+        .page {
+            width: 100%;
+        }
+
+        /* 모바일 앱 스타일 */
+        .mobile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 건물 정보 */
+        .building-info {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .building-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .building-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .building-list-btn {
+            background: #f8f9fa;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .building-list-btn:hover {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .building-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .building-name-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .building-name-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .save-building-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .save-building-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* 건물 목록 모달 */
+        .building-list-content {
+            max-width: 500px;
+            max-height: 70vh;
+        }
+
+        .building-list {
+            max-height: 50vh;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .building-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .building-item:hover {
+            border-color: #2563eb;
+            background: #f8faff;
+        }
+
+        .building-item.active {
+            border-color: #2563eb;
+            background: #e3f2fd;
+        }
+
+        .building-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .building-info-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .building-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .building-delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .building-delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .building-list-actions {
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .new-building-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .new-building-btn:hover {
+            background: #059669;
+        }
+
+        /* 임장앱 - 층별 네비게이션 */
+        .floor-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e5e7eb;
+        }
+
+        .floor-nav h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .floor-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+        }
+
+        .floor-btn {
+            background: #f8f9fa;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .floor-btn:hover {
+            background: #e3f2fd;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .floor-btn.active {
+            background: #2563eb;
+            border-color: #1d4ed8;
+            color: white;
+        }
+
+        /* 그리드 컨테이너 */
+        .grid-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e5e7eb;
+        }
+
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .current-floor {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .grid-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .grid-container-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            padding: 40px;
+            min-height: 200px;
+        }
+
+        /* 셀 래퍼 */
+        .room-cell-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* 셀별 추가 버튼 */
+        .cell-add-btn {
+            position: absolute;
+            background: #f0f7ff;
+            border: 2px solid #2563eb;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.8);
+            z-index: 10;
+        }
+
+        .room-cell-wrapper:hover .cell-add-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .cell-add-btn:hover {
+            background: #2563eb;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+        }
+
+        .cell-add-btn.top {
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+        }
+
+        .cell-add-btn.bottom {
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+        }
+
+        .cell-add-btn.left {
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%) scale(0.8);
+        }
+
+        .cell-add-btn.right {
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%) scale(0.8);
+        }
+
+        .room-cell-wrapper:hover .cell-add-btn.top {
+            transform: translateX(-50%) scale(1);
+        }
+
+        .room-cell-wrapper:hover .cell-add-btn.bottom {
+            transform: translateX(-50%) scale(1);
+        }
+
+        .room-cell-wrapper:hover .cell-add-btn.left {
+            transform: translateY(-50%) scale(1);
+        }
+
+        .room-cell-wrapper:hover .cell-add-btn.right {
+            transform: translateY(-50%) scale(1);
+        }
+
+        /* 그리드 컨테이너 래퍼 */
+        .grid-container-wrapper {
+            max-height: 60vh;
+            overflow: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #fafafa;
+            position: relative;
+        }
+
+        /* 커스텀 스크롤바 */
+        .grid-container-wrapper::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .grid-container-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .grid-container-wrapper::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .grid-container-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* 그리드 */
+        .room-grid {
+            display: grid;
+            gap: 1px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 300px;
+            padding: 20px;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .room-cell {
+            width: 60px;
+            height: 30px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-size: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .room-cell.empty {
+            background: #ffffff;
+            border: 2px dashed #c1c1c1;
+            color: #999;
+            cursor: default;
+        }
+
+        .room-cell.empty:hover {
+            background: #ffffff;
+            border-color: #c1c1c1;
+        }
+
+        .room-cell:hover {
+            border-color: #2563eb;
+            background: #e3f2fd;
+        }
+
+        .room-cell.occupied {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #15803d;
+        }
+
+        .room-cell.vacant {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #d97706;
+        }
+
+        .room-cell.check-needed {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .room-cell.facility {
+            background: #e0e7ff;
+            border-color: #6366f1;
+            color: #4f46e5;
+        }
+
+        .room-number {
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .room-status {
+            font-size: 8px;
+            margin-top: 2px;
+        }
+
+        /* 액션 버튼 */
+        .action-buttons {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e5e7eb;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: #f8f9fa;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .action-btn:hover {
+            background: #e3f2fd;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .action-btn.primary {
+            background: #2563eb;
+            border-color: #1d4ed8;
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: #1d4ed8;
+        }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 8px 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-select {
+            flex: 1;
+            padding: 8px 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+        }
+
+        .form-textarea {
+            flex: 1;
+            padding: 8px 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 13px;
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* 모달 버튼들 */
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .delete-btn {
+            flex: 1;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .submit-btn {
+            flex: 1;
+        }
+
+        /* 방향 버튼 스타일 */
+        .direction-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        /* 방향 버튼을 포함한 form-group은 세로 레이아웃 유지 */
+        .form-group.direction-group {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .direction-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .direction-btn {
+            background: #f8f9fa;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 70px;
+            justify-content: center;
+        }
+
+        .direction-btn:hover {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .direction-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 하이라이트 애니메이션 */
+        @keyframes highlight {
+            0%, 100% {
+                box-shadow: none;
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(37, 99, 235, 0.8);
+                transform: scale(1.05);
+            }
+        }
+
+        /* 커스텀 알림 */
+        .custom-alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .alert-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            animation: alertSlideIn 0.3s ease-out;
+        }
+
+        .alert-message {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .alert-sub {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 0;
+        }
+
+        @keyframes alertSlideIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 15px 0;
+            }
+
+            .nav {
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-top: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+
+            .property-header,
+            .property-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .hero h2 {
+                font-size: 22px;
+            }
+
+            .grid-container-wrapper {
+                max-height: 50vh;
+                margin: 0 -15px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+
+            .room-grid {
+                padding: 15px;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .mobile-app-container {
+                padding: 0 15px;
+            }
+
+            .grid-container {
+                margin: 0 -15px;
+            }
+
+            .floor-nav {
+                margin: 0 -15px;
+                padding: 15px;
+                background: #f8f9fa;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .floor-buttons {
+                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+                gap: 8px;
+            }
+
+            .floor-btn {
+                padding: 10px 4px;
+                font-size: 12px;
+            }
+
+            .mobile-container {
+                padding: 0;
+            }
+
+            .building-info {
+                margin: 0 -15px 15px -15px;
+                border-radius: 0;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .grid-header {
+                margin: 0 -15px;
+                padding: 10px 15px;
+                background: white;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .current-floor {
+                font-size: 16px;
+            }
+
+            .room-cell {
+                width: 50px;
+                height: 25px;
+                font-size: 9px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+                margin: 0 -15px;
+                padding: 15px;
+                background: #f8f9fa;
+                border-top: 1px solid #e5e7eb;
+            }
+
+            .action-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1><span>인사이트</span> 부동산</h1>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-item active" onclick="showDashboard()">대시보드</a>
+                <a href="#" class="nav-item" onclick="showRealEstateStatus()">매물임장</a>
+                <a href="#" class="nav-item" onclick="showProperty()">매물</a>
+                <a href="#" class="nav-item" onclick="showCustomer()">고객</a>
+                <a href="#" class="nav-item" onclick="showContract()">계약</a>
+            </nav>
+            <div class="header-right">
+                <i class="fas fa-bell notification-icon"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main" id="mainContent">
+        <!-- 대시보드 페이지 -->
+        <div class="page" id="dashboardPage">
+            <div class="container">
+                <!-- 메인 타이틀 -->
+                <section class="hero">
+                    <h2>공인중개사를 위한 <span class="highlight">쉽고, 편리한</span> 중개업 통합 솔루션 <span class="brand">부동산이지</span></h2>
+                </section>
+
+                <!-- 기능 아이콘 그리드 -->
+                <section class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <span>부동산 현황 관리</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <span>현장 지도</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span>매물 관리</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <span>매물 업무</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <span>의뢰 관리</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>의뢰 검수</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <span>계약 관리</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <span>계약서 작성</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <span>일정 관리</span>
+                    </div>
+                </section>
+
+                <!-- 대시보드 섹션 -->
+                <section class="dashboard">
+                    <div class="dashboard-left">
+                        <h3>대시보드</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card primary">
+                                <div class="stat-label">매물</div>
+                                <div class="stat-value">1 / 1</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">어제</div>
+                                <div class="stat-value">0 / 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">개저</div>
+                                <div class="stat-value">0 / 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">전극</div>
+                                <div class="stat-value">0 / 0</div>
+                            </div>
+                        </div>
+
+                        <!-- 매물 목록 -->
+                        <div class="property-list">
+                            <div class="property-header">
+                                <span>소재지</span>
+                                <span>거래형태 / 금액</span>
+                                <span>당일차</span>
+                                <span>응답률</span>
+                            </div>
+                            <div class="property-item">
+                                <div class="property-address">
+                                    <span class="status-badge sold">완</span>
+                                    마곡동 777-5번지 마곡엘디에이곡랜타워 118층
+                                </div>
+                                <div class="property-price">
+                                    <span class="price-badge deposit">월</span>
+                                    <span class="price">4,000 / 270</span>
+                                </div>
+                                <div class="property-views">최영현</div>
+                                <div class="property-response">차</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 사용자 정보 박스 -->
+                    <div class="user-info">
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name">kindly98</div>
+                                <div class="user-status">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <button class="logout-btn">로그아웃</button>
+                        </div>
+                        <div class="user-company">
+                            <div class="company-info">
+                                <span class="label">상호</span>
+                                <span class="value">인사이트 공인중개사사무소</span>
+                            </div>
+                            <div class="company-info">
+                                <span class="label">대표</span>
+                                <span class="value">최영현</span>
+                            </div>
+                        </div>
+                        <div class="monthly-stats">
+                            <div class="stats-header">
+                                <span>월말</span>
+                                <span class="count">0</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="notice">
+                            <p>월말이지 않은 일정이 있습니다.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- 임장앱 페이지 -->
+        <div class="page" id="mobileAppPage" style="display: none;">
+            <div class="mobile-container">
+                <!-- 건물 정보 -->
+                <div class="building-info">
+                    <div class="building-header">
+                        <h2>매물임장</h2>
+                        <button class="building-list-btn" onclick="showBuildingList()">
+                            <i class="fas fa-list"></i> 건물 목록
+                        </button>
+                    </div>
+                    <div class="building-input">
+                        <input type="text" id="buildingName" placeholder="건물명을 입력하세요" class="building-name-input">
+                        <button class="save-building-btn" onclick="saveCurrentBuilding()">
+                            <i class="fas fa-save"></i> 저장
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 층별 네비게이션 -->
+                <div class="floor-nav">
+                    <h3>층 선택</h3>
+                    <div class="floor-buttons" id="floorButtons">
+                        <button class="floor-btn active" data-floor="1">1층</button>
+                        <button class="floor-btn" data-floor="2">2층</button>
+                        <button class="floor-btn" data-floor="3">3층</button>
+                        <button class="floor-btn" data-floor="4">4층</button>
+                        <button class="floor-btn" data-floor="5">5층</button>
+                    </div>
+                    <div style="margin-top: 15px; text-align: center;">
+                        <button class="control-btn" onclick="addFloor()">+ 층 추가</button>
+                    </div>
+                </div>
+
+                <!-- 그리드 컨테이너 -->
+                <div class="grid-container">
+                    <div class="grid-header">
+                        <div class="current-floor" id="currentFloor">1층</div>
+                        <div class="grid-controls">
+                        </div>
+                    </div>
+
+                    <!-- 그리드 컨테이너 -->
+                    <div class="grid-container-wrapper">
+                        <div class="room-grid" id="roomGrid">
+                            <!-- JavaScript로 동적 생성 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 액션 버튼 -->
+                <div class="action-buttons">
+                    <div class="action-grid">
+                        <button class="action-btn" onclick="saveData()">💾 저장</button>
+                        <button class="action-btn" onclick="loadData()">📂 불러오기</button>
+                        <button class="action-btn primary" onclick="exportToExcel()">📊 엑셀 내보내기</button>
+                        <button class="action-btn" onclick="resetGrid()">🔄 초기화</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 호실 정보 모달 -->
+    <div class="modal" id="roomModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">호실 정보</div>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <form id="roomForm">
+                <!-- 기본 정보 -->
+                <div class="form-group">
+                    <label class="form-label">호실명</label>
+                    <input type="text" class="form-input" id="roomNumber" placeholder="101">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">상태</label>
+                    <select class="form-select" id="roomStatus">
+                        <option value="vacant">공실</option>
+                        <option value="occupied">영업중</option>
+                        <option value="check-needed">확인필요</option>
+                    </select>
+                </div>
+
+                <!-- 현장 정보 -->
+                <div class="form-group">
+                    <label class="form-label">상호</label>
+                    <input type="text" class="form-input" id="businessName" placeholder="상호명">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">연락처</label>
+                    <input type="tel" class="form-input" id="contactNumber" placeholder="010-1234-5678">
+                </div>
+
+                <!-- 소유자 정보 -->
+                <div class="form-group">
+                    <label class="form-label">소유자명</label>
+                    <input type="text" class="form-input" id="ownerName" placeholder="소유자명">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">소유자 전화번호</label>
+                    <input type="tel" class="form-input" id="ownerPhone" placeholder="010-1234-5678">
+                </div>
+
+                <!-- 임대 정보 -->
+                <div class="form-group">
+                    <label class="form-label">현재임대료 (만원)</label>
+                    <input type="number" class="form-input" id="currentRent" placeholder="100">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">희망임대료 (만원)</label>
+                    <input type="number" class="form-input" id="desiredRent" placeholder="120">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">권리금 (만원)</label>
+                    <input type="number" class="form-input" id="keyMoney" placeholder="500">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">입주시기</label>
+                    <input type="date" class="form-input" id="moveInDate">
+                </div>
+
+                <!-- 매물 정보 -->
+                <div class="form-group">
+                    <label class="form-label">용도</label>
+                    <select class="form-select" id="purpose">
+                        <option value="office">사무실</option>
+                        <option value="retail">상가</option>
+                        <option value="restaurant">음식점</option>
+                        <option value="warehouse">창고</option>
+                        <option value="other">기타</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">전용면적 (㎡)</label>
+                    <input type="number" class="form-input" id="exclusiveArea" placeholder="33.06">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">공용면적 (㎡)</label>
+                    <input type="number" class="form-input" id="commonArea" placeholder="10.23">
+                </div>
+
+                <!-- 메모 -->
+                <div class="form-group">
+                    <label class="form-label">메모</label>
+                    <textarea class="form-textarea" id="memo" placeholder="추가 정보를 입력하세요"></textarea>
+                </div>
+
+                <!-- 호실 추가 영역 -->
+                <div class="form-group direction-group">
+                    <label class="form-label">인접 호실 추가</label>
+                    <div class="direction-buttons">
+                        <div class="direction-row">
+                            <button type="button" class="direction-btn" onclick="addRoomFromModal('up')">
+                                <i class="fas fa-arrow-up"></i> 위
+                            </button>
+                        </div>
+                        <div class="direction-row">
+                            <button type="button" class="direction-btn" onclick="addRoomFromModal('left')">
+                                <i class="fas fa-arrow-left"></i> 왼쪽
+                            </button>
+                            <button type="button" class="direction-btn" onclick="addRoomFromModal('right')">
+                                <i class="fas fa-arrow-right"></i> 오른쪽
+                            </button>
+                        </div>
+                        <div class="direction-row">
+                            <button type="button" class="direction-btn" onclick="addRoomFromModal('down')">
+                                <i class="fas fa-arrow-down"></i> 아래
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="submit" class="submit-btn">저장</button>
+                    <button type="button" class="delete-btn" onclick="deleteRoom()">호실 삭제</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 커스텀 알림 -->
+    <div class="custom-alert" id="customAlert">
+        <div class="alert-content">
+            <div class="alert-message" id="alertMessage"></div>
+            <div class="alert-sub">화면 아무 곳이나 터치하세요</div>
+        </div>
+    </div>
+
+    <!-- 건물 목록 모달 -->
+    <div class="modal" id="buildingListModal">
+        <div class="modal-content building-list-content">
+            <div class="modal-header">
+                <div class="modal-title">건물 목록</div>
+                <button class="close-btn" onclick="closeBuildingListModal()">&times;</button>
+            </div>
+            <div class="building-list" id="buildingList">
+                <!-- JavaScript로 동적 생성 -->
+            </div>
+            <div class="building-list-actions">
+                <button class="new-building-btn" onclick="createNewBuilding()">
+                    <i class="fas fa-plus"></i> 새 건물
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 커스텀 알림 함수
+        function showCustomAlert(message) {
+            const alertElement = document.getElementById('customAlert');
+            const messageElement = document.getElementById('alertMessage');
+
+            messageElement.textContent = message;
+            alertElement.style.display = 'flex';
+
+            // 클릭 이벤트 리스너 추가
+            const hideAlert = () => {
+                alertElement.style.display = 'none';
+                alertElement.removeEventListener('click', hideAlert);
+            };
+
+            alertElement.addEventListener('click', hideAlert);
+        }
+
+        // 네비게이션 함수들
+        function showRealEstateStatus() {
+            // 부동산 현황 - 임장앱으로 전환
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('mobileAppPage').style.display = 'block';
+
+            // 네비게이션 활성화 상태 변경
+            setActiveTab('RealEstateStatus');
+
+            // 현재 페이지 저장
+            localStorage.setItem('currentPage', 'RealEstateStatus');
+
+            // 임장앱 초기화
+            initMobileApp();
+        }
+
+        function showProperty() {
+            // 현재 페이지 저장
+            localStorage.setItem('currentPage', 'Property');
+            alert('매물 관리 페이지 준비 중입니다.');
+        }
+
+        function showCustomer() {
+            // 현재 페이지 저장
+            localStorage.setItem('currentPage', 'Customer');
+            alert('고객 관리 페이지 준비 중입니다.');
+        }
+
+        function showDashboard() {
+            // 현재 페이지 (대시보드)
+            document.getElementById('dashboardPage').style.display = 'block';
+            document.getElementById('mobileAppPage').style.display = 'none';
+
+            // 네비게이션 활성화 상태 변경
+            setActiveTab('Dashboard');
+
+            // 현재 페이지 저장
+            localStorage.setItem('currentPage', 'Dashboard');
+        }
+
+        function showContract() {
+            // 현재 페이지 저장
+            localStorage.setItem('currentPage', 'Contract');
+            alert('계약 관리 페이지 준비 중입니다.');
+        }
+
+        // 활성 탭 변경
+        function setActiveTab(tabName) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 탭 이름에 맞는 onclick 함수를 찾아서 활성화
+            const tabMap = {
+                'Dashboard': 'showDashboard()',
+                'RealEstateStatus': 'showRealEstateStatus()',
+                'Property': 'showProperty()',
+                'Customer': 'showCustomer()',
+                'Contract': 'showContract()'
+            };
+
+            const targetFunction = tabMap[tabName];
+            if (targetFunction) {
+                const targetElement = document.querySelector(`[onclick="${targetFunction}"]`);
+                if (targetElement) {
+                    targetElement.classList.add('active');
+                }
+            }
+        }
+
+        // 임장앱 전역 변수
+        let currentFloor = 1;
+        let roomData = {};
+        let currentEditingCell = null;
+        let floorGrids = {}; // 각 층별 그리드 데이터 저장
+        let maxFloor = 5;
+        let currentBuildingName = '';
+        let buildingsData = {}; // 건물별 데이터 저장 {건물명: {roomData, floorGrids, maxFloor}}
+
+        // 건물 저장
+        function saveCurrentBuilding() {
+            const buildingName = document.getElementById('buildingName').value.trim();
+
+            if (!buildingName) {
+                showCustomAlert('건물명을 입력해주세요.');
+                return;
+            }
+
+            // 현재 건물 데이터 저장
+            buildingsData[buildingName] = {
+                roomData: { ...roomData },
+                floorGrids: { ...floorGrids },
+                maxFloor: maxFloor
+            };
+
+            currentBuildingName = buildingName;
+
+            // 로컬스토리지에 건물 데이터 저장
+            localStorage.setItem('buildingsData', JSON.stringify(buildingsData));
+            localStorage.setItem('currentBuildingName', buildingName);
+
+            showCustomAlert(`"${buildingName}" 건물이 저장되었습니다.`);
+        }
+
+        // 건물 목록 표시
+        function showBuildingList() {
+            const modal = document.getElementById('buildingListModal');
+            const buildingList = document.getElementById('buildingList');
+
+            // 건물 목록 렌더링
+            buildingList.innerHTML = '';
+
+            if (Object.keys(buildingsData).length === 0) {
+                buildingList.innerHTML = '<div style="text-align: center; color: #666; padding: 40px;">저장된 건물이 없습니다.</div>';
+            } else {
+                Object.keys(buildingsData).forEach(buildingName => {
+                    const building = buildingsData[buildingName];
+                    const roomCount = Object.keys(building.roomData).length;
+
+                    const item = document.createElement('div');
+                    item.className = 'building-item';
+                    if (buildingName === currentBuildingName) {
+                        item.classList.add('active');
+                    }
+
+                    item.innerHTML = `
+                        <div onclick="selectBuilding('${buildingName}')">
+                            <div class="building-name">${buildingName}</div>
+                            <div class="building-info-text">${building.maxFloor}층 • 호실 ${roomCount}개</div>
+                        </div>
+                        <div class="building-actions">
+                            <button class="building-delete-btn" onclick="deleteBuilding('${buildingName}')" title="삭제">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+
+                    buildingList.appendChild(item);
+                });
+            }
+
+            modal.style.display = 'block';
+        }
+
+        // 건물 선택
+        function selectBuilding(buildingName) {
+            loadBuildingData(buildingName);
+            closeBuildingListModal();
+            showCustomAlert(`"${buildingName}" 건물을 불러왔습니다.`);
+        }
+
+        // 건물 삭제
+        function deleteBuilding(buildingName) {
+            if (confirm(`"${buildingName}" 건물을 삭제하시겠습니까?\n모든 호실 데이터가 삭제됩니다.`)) {
+                delete buildingsData[buildingName];
+
+                // 현재 건물이 삭제된 경우 초기화
+                if (currentBuildingName === buildingName) {
+                    currentBuildingName = '';
+                    document.getElementById('buildingName').value = '';
+                    roomData = {};
+                    floorGrids = {};
+                    maxFloor = 5;
+
+                    // 기본 데이터로 초기화
+                    for (let i = 1; i <= maxFloor; i++) {
+                        floorGrids[i] = [
+                            {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+                        ];
+                    }
+
+                    regenerateFloorButtons();
+                    renderGrid(currentFloor);
+                }
+
+                // 로컬스토리지 업데이트
+                localStorage.setItem('buildingsData', JSON.stringify(buildingsData));
+                localStorage.removeItem('currentBuildingName');
+
+                // 목록 다시 표시
+                showBuildingList();
+
+                showCustomAlert(`"${buildingName}" 건물이 삭제되었습니다.`);
+            }
+        }
+
+        // 새 건물 생성
+        function createNewBuilding() {
+            closeBuildingListModal();
+
+            // 현재 데이터 초기화
+            currentBuildingName = '';
+            document.getElementById('buildingName').value = '';
+            document.getElementById('buildingName').focus();
+
+            roomData = {};
+            floorGrids = {};
+            maxFloor = 5;
+
+            // 기본 데이터로 초기화
+            for (let i = 1; i <= maxFloor; i++) {
+                floorGrids[i] = [
+                    {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+                ];
+            }
+
+            regenerateFloorButtons();
+            renderGrid(currentFloor);
+
+            showCustomAlert('새 건물을 생성했습니다. 건물명을 입력하고 저장해주세요.');
+        }
+
+        // 건물 목록 모달 닫기
+        function closeBuildingListModal() {
+            const modal = document.getElementById('buildingListModal');
+            modal.style.display = 'none';
+        }
+
+        // 건물 데이터 로드
+        function loadBuildingData(buildingName) {
+            if (buildingsData[buildingName]) {
+                const buildingData = buildingsData[buildingName];
+                roomData = { ...buildingData.roomData };
+                floorGrids = { ...buildingData.floorGrids };
+                maxFloor = buildingData.maxFloor;
+                currentBuildingName = buildingName;
+
+                // UI 업데이트
+                document.getElementById('buildingName').value = buildingName;
+
+                // 층 버튼 재생성
+                regenerateFloorButtons();
+
+                // 현재 층 렌더링
+                renderGrid(currentFloor);
+
+                localStorage.setItem('currentBuildingName', buildingName);
+            }
+        }
+
+        // 층 버튼 재생성
+        function regenerateFloorButtons() {
+            const floorButtons = document.getElementById('floorButtons');
+            floorButtons.innerHTML = '';
+
+            for (let i = 1; i <= maxFloor; i++) {
+                const button = document.createElement('button');
+                button.className = 'floor-btn';
+                if (i === currentFloor) button.classList.add('active');
+                button.dataset.floor = i;
+                button.textContent = i + '층';
+                button.addEventListener('click', () => {
+                    changeFloor(i);
+                });
+                floorButtons.appendChild(button);
+            }
+        }
+
+        // 임장앱 초기화
+        function initMobileApp() {
+            // 로컬스토리지에서 건물 데이터 불러오기
+            loadBuildingsData();
+
+            // 기본 층 데이터 초기화 (로컬스토리지에 데이터가 없는 경우만)
+            for (let i = 1; i <= maxFloor; i++) {
+                if (!floorGrids[i]) {
+                    floorGrids[i] = [
+                        {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+                    ];
+                }
+            }
+
+            // 저장된 층 또는 첫 번째 층 로드
+            const savedFloor = parseInt(localStorage.getItem('currentFloor')) || 1;
+            changeFloor(savedFloor);
+
+            // 층 버튼 이벤트
+            document.querySelectorAll('.floor-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    changeFloor(parseInt(btn.dataset.floor));
+                });
+            });
+        }
+
+        // 층 변경
+        function changeFloor(floor) {
+            currentFloor = floor;
+            document.getElementById('currentFloor').textContent = floor + '층';
+
+            // 층 버튼 활성화 상태 변경
+            document.querySelectorAll('.floor-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.floor == floor) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // 현재 층 저장
+            localStorage.setItem('currentFloor', floor);
+
+            loadFloorData(floor);
+        }
+
+        // 층별 데이터 로드
+        function loadFloorData(floor) {
+            const grid = document.getElementById('roomGrid');
+
+            // 층별 그리드가 없으면 기본 1개 셀로 초기화
+            if (!floorGrids[floor]) {
+                floorGrids[floor] = [
+                    {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+                ];
+            }
+
+            // 그리드 렌더링
+            renderGrid(floor);
+        }
+
+        // 그리드 렌더링
+        function renderGrid(floor) {
+            const grid = document.getElementById('roomGrid');
+            if (!grid) return; // 그리드가 없으면 종료
+
+            const floorData = floorGrids[floor] || [
+                {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+            ];
+
+            // 그리드 내용 클리어
+            grid.innerHTML = '';
+
+            // 최소/최대 행과 열 계산
+            let minRow = Math.min(...floorData.map(cell => cell.row));
+            let maxRow = Math.max(...floorData.map(cell => cell.row));
+            let minCol = Math.min(...floorData.map(cell => cell.col));
+            let maxCol = Math.max(...floorData.map(cell => cell.col));
+
+            // 그리드 크기 설정 (여백 포함)
+            const gridRows = maxRow - minRow + 3; // 위아래 여백
+            const gridCols = maxCol - minCol + 3; // 좌우 여백
+
+            // 모바일 환경 감지
+            const isMobile = window.innerWidth <= 768;
+            const rowHeight = isMobile ? '27px' : '32px';
+            const colWidth = isMobile ? '52px' : '62px';
+
+            grid.style.gridTemplateRows = `repeat(${gridRows}, ${rowHeight})`;
+            grid.style.gridTemplateColumns = `repeat(${gridCols}, ${colWidth})`;
+
+            // 각 셀에 대해 wrapper와 셀 생성
+            floorData.forEach(cellData => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'room-cell-wrapper';
+                wrapper.dataset.row = cellData.row;
+                wrapper.dataset.col = cellData.col;
+
+                // CSS Grid 위치 설정 (1-based, 여백 고려)
+                const gridRow = cellData.row - minRow + 2;
+                const gridCol = cellData.col - minCol + 2;
+                wrapper.style.gridRow = gridRow;
+                wrapper.style.gridColumn = gridCol;
+
+                const cell = document.createElement('div');
+                cell.className = 'room-cell';
+                cell.dataset.row = cellData.row;
+                cell.dataset.col = cellData.col;
+
+                // 빈 셀 처리
+                if (cellData.type === 'empty') {
+                    cell.classList.add('empty');
+                    cell.textContent = '빈 공간';
+                    cell.onclick = () => openRoomModal(cell); // 빈 공간도 클릭해서 새 호실 추가 가능
+                } else {
+                    cell.onclick = () => openRoomModal(cell);
+                    if (cellData.roomNumber) {
+                        cell.textContent = cellData.roomNumber;
+                    } else {
+                        cell.textContent = '호실';
+                    }
+                }
+
+                wrapper.appendChild(cell);
+
+                // 방향 버튼들 추가
+                const directions = ['top', 'bottom', 'left', 'right'];
+                const directionMap = {
+                    'top': 'up',
+                    'bottom': 'down',
+                    'left': 'left',
+                    'right': 'right'
+                };
+
+                directions.forEach(dir => {
+                    const btn = document.createElement('button');
+                    btn.className = `cell-add-btn ${dir}`;
+                    btn.textContent = '+';
+                    btn.title = `${dir === 'top' ? '위' : dir === 'bottom' ? '아래' : dir === 'left' ? '왼쪽' : '오른쪽'}쪽에 호실 추가`;
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        addCellAt(cellData.row, cellData.col, directionMap[dir]);
+                    };
+                    wrapper.appendChild(btn);
+                });
+
+                grid.appendChild(wrapper);
+            });
+        }
+
+        // 특정 셀 기준으로 인접 셀 추가
+        function addCellAt(row, col, direction) {
+            if (!floorGrids[currentFloor]) {
+                floorGrids[currentFloor] = [
+                    {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+                ];
+            }
+
+            let floorData = floorGrids[currentFloor];
+            let newRow = parseInt(row);
+            let newCol = parseInt(col);
+
+            // 새 셀의 위치 계산
+            switch(direction) {
+                case 'up':
+                    newRow = newRow - 1;
+                    break;
+                case 'down':
+                    newRow = newRow + 1;
+                    break;
+                case 'left':
+                    newCol = newCol - 1;
+                    break;
+                case 'right':
+                    newCol = newCol + 1;
+                    break;
+            }
+
+            // 같은 위치에 이미 셀이 있는지 확인
+            const existingCell = floorData.find(cell => cell.row === newRow && cell.col === newCol);
+            if (existingCell) {
+                showCustomAlert('이미 해당 위치에 호실이 있습니다.');
+                return;
+            }
+
+            // 새 셀 추가
+            const newCell = {
+                row: newRow,
+                col: newCol,
+                type: 'room',
+                roomNumber: '',
+                data: {}
+            };
+
+            floorData.push(newCell);
+            floorGrids[currentFloor] = floorData;
+
+            // 그리드 다시 렌더링
+            renderGrid(currentFloor);
+
+            // 자동 저장
+            saveData();
+
+            // 새로 추가된 호실로 스크롤
+            setTimeout(() => {
+                scrollToNewRoom(newRow, newCol);
+            }, 100);
+
+            console.log(`새 호실 추가됨: (${newRow}, ${newCol}) 방향: ${direction}`);
+        }
+
+        // 새로 추가된 호실로 스크롤
+        function scrollToNewRoom(row, col) {
+            const wrapper = document.querySelector(`[data-row="${row}"][data-col="${col}"].room-cell-wrapper`);
+            if (wrapper) {
+                const container = document.querySelector('.grid-container-wrapper');
+                if (container) {
+                    const wrapperRect = wrapper.getBoundingClientRect();
+                    const containerRect = container.getBoundingClientRect();
+
+                    // 컨테이너 기준으로 스크롤 위치 계산
+                    const scrollTop = container.scrollTop + wrapperRect.top - containerRect.top - container.clientHeight / 2 + wrapper.clientHeight / 2;
+                    const scrollLeft = container.scrollLeft + wrapperRect.left - containerRect.left - container.clientWidth / 2 + wrapper.clientWidth / 2;
+
+                    container.scrollTo({
+                        top: Math.max(0, scrollTop),
+                        left: Math.max(0, scrollLeft),
+                        behavior: 'smooth'
+                    });
+
+                    // 새로 추가된 호실을 잠깐 하이라이트
+                    wrapper.style.animation = 'highlight 1.5s ease-in-out';
+                    setTimeout(() => {
+                        wrapper.style.animation = '';
+                    }, 1500);
+                }
+            }
+        }
+
+        // 모달에서 호실 추가
+        function addRoomFromModal(direction) {
+            if (!currentEditingCell) return;
+
+            const row = parseInt(currentEditingCell.dataset.row);
+            const col = parseInt(currentEditingCell.dataset.col);
+
+            // 현재 모달의 데이터 저장 (추가 전에)
+            if (document.getElementById('roomNumber').value) {
+                saveRoomData();
+            }
+
+            // 새 호실 추가
+            addCellAt(row, col, direction);
+
+            // 모달 닫기
+            closeModal();
+        }
+
+        // 호실 삭제
+        function deleteRoom() {
+            if (!currentEditingCell) return;
+
+            const confirmation = confirm('이 호실을 삭제하시겠습니까?\n삭제된 자리는 빈 공간으로 유지됩니다.');
+            if (!confirmation) return;
+
+            const row = parseInt(currentEditingCell.dataset.row);
+            const col = parseInt(currentEditingCell.dataset.col);
+
+            // 층 데이터에서 해당 셀을 빈 셀로 변경
+            const floorData = floorGrids[currentFloor];
+            const cellData = floorData.find(cell => cell.row === row && cell.col === col);
+
+            if (cellData) {
+                // 호실 데이터 삭제
+                const roomNumber = cellData.roomNumber;
+                if (roomNumber) {
+                    const key = `${currentFloor}-${roomNumber}`;
+                    delete roomData[key];
+                }
+
+                // 셀을 빈 상태로 변경 (삭제하지 않고 빈 공간으로 유지)
+                cellData.type = 'empty';
+                cellData.roomNumber = '';
+                cellData.data = {};
+
+                // 그리드 다시 렌더링
+                renderGrid(currentFloor);
+
+                // 자동 저장
+                saveData();
+
+                showCustomAlert('호실이 삭제되었습니다.');
+            }
+
+            // 모달 닫기
+            closeModal();
+        }
+
+        // 층 추가
+        function addFloor() {
+            maxFloor++;
+            const floorButtons = document.getElementById('floorButtons');
+            if (!floorButtons) return;
+
+            const newButton = document.createElement('button');
+            newButton.className = 'floor-btn';
+            newButton.dataset.floor = maxFloor;
+            newButton.textContent = maxFloor + '층';
+            newButton.addEventListener('click', () => {
+                changeFloor(maxFloor);
+            });
+            floorButtons.appendChild(newButton);
+
+            // 새 층을 기본 1개 셀로 초기화
+            floorGrids[maxFloor] = [
+                {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+            ];
+
+            showCustomAlert(`${maxFloor}층이 추가되었습니다.`);
+        }
+
+        // 호실 모달 열기
+        function openRoomModal(cell) {
+            currentEditingCell = cell;
+            const modal = document.getElementById('roomModal');
+            if (!modal) return;
+
+            const roomNumber = cell.dataset.room || '';
+            const roomType = cell.dataset.type || '';
+            const isEmpty = cell.classList.contains('empty');
+
+            if (isEmpty) {
+                document.getElementById('modalTitle').textContent = '새 호실 추가';
+                // 빈 공간에서는 삭제 버튼 숨기기
+                document.querySelector('.delete-btn').style.display = 'none';
+                // 폼 초기화
+                document.getElementById('roomForm').reset();
+            } else {
+                if (roomType) {
+                    document.getElementById('modalTitle').textContent = '시설 정보';
+                } else {
+                    document.getElementById('modalTitle').textContent = '호실 정보';
+                }
+                // 일반 호실에서는 삭제 버튼 보이기
+                document.querySelector('.delete-btn').style.display = 'block';
+                // 기존 데이터 로드
+                loadRoomData(roomNumber);
+            }
+
+            modal.style.display = 'block';
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            const modal = document.getElementById('roomModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            currentEditingCell = null;
+        }
+
+        // 호실 데이터 로드
+        function loadRoomData(roomNumber) {
+            const data = roomData[`${currentFloor}-${roomNumber}`] || {};
+
+            const fields = ['roomNumber', 'roomStatus', 'businessName', 'contactNumber', 'ownerName', 'ownerPhone', 'currentRent', 'desiredRent', 'keyMoney', 'moveInDate', 'purpose', 'exclusiveArea', 'commonArea', 'memo'];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    if (field === 'roomNumber') {
+                        element.value = data.roomNumber || roomNumber;
+                    } else if (field === 'roomStatus') {
+                        element.value = data.status || 'vacant';
+                    } else {
+                        element.value = data[field] || '';
+                    }
+                }
+            });
+        }
+
+        // 호실 데이터 저장
+        function saveRoomData() {
+            const roomNumber = document.getElementById('roomNumber').value;
+            const key = `${currentFloor}-${roomNumber}`;
+
+            roomData[key] = {
+                roomNumber: document.getElementById('roomNumber').value,
+                status: document.getElementById('roomStatus').value,
+                businessName: document.getElementById('businessName').value,
+                contactNumber: document.getElementById('contactNumber').value,
+                ownerName: document.getElementById('ownerName').value,
+                ownerPhone: document.getElementById('ownerPhone').value,
+                currentRent: document.getElementById('currentRent').value,
+                desiredRent: document.getElementById('desiredRent').value,
+                keyMoney: document.getElementById('keyMoney').value,
+                moveInDate: document.getElementById('moveInDate').value,
+                purpose: document.getElementById('purpose').value,
+                exclusiveArea: document.getElementById('exclusiveArea').value,
+                commonArea: document.getElementById('commonArea').value,
+                memo: document.getElementById('memo').value,
+                floor: currentFloor
+            };
+
+            // 층 데이터에서 해당 셀 업데이트
+            const floorData = floorGrids[currentFloor];
+            const row = parseInt(currentEditingCell.dataset.row);
+            const col = parseInt(currentEditingCell.dataset.col);
+            const cellData = floorData.find(cell => cell.row === row && cell.col === col);
+            if (cellData) {
+                cellData.roomNumber = roomNumber;
+                cellData.data = roomData[key];
+                cellData.type = 'room'; // 빈 공간에서 호실로 변경
+            }
+
+            // 셀 업데이트
+            updateCell(currentEditingCell, roomData[key]);
+
+            // 자동 저장
+            saveData();
+
+            closeModal();
+        }
+
+        // 셀 업데이트
+        function updateCell(cell, data) {
+            if (!cell) return;
+
+            // 호실명 업데이트
+            cell.dataset.room = data.roomNumber;
+
+            // 상태에 따른 클래스 변경
+            cell.className = 'room-cell';
+            if (data.status === 'occupied') {
+                cell.classList.add('occupied');
+            } else if (data.status === 'vacant') {
+                cell.classList.add('vacant');
+            } else if (data.status === 'check-needed') {
+                cell.classList.add('check-needed');
+            }
+
+            // 내용 업데이트
+            cell.textContent = data.roomNumber;
+        }
+
+        // 데이터 저장
+        function saveData() {
+            const dataStr = JSON.stringify({
+                roomData: roomData,
+                floorGrids: floorGrids
+            });
+            localStorage.setItem('mobileAppData', dataStr);
+            showCustomAlert('데이터가 저장되었습니다.');
+        }
+
+        // 건물 데이터 불러오기
+        function loadBuildingsData() {
+            const buildingsDataStr = localStorage.getItem('buildingsData');
+            const currentBuildingNameStr = localStorage.getItem('currentBuildingName');
+
+            if (buildingsDataStr) {
+                buildingsData = JSON.parse(buildingsDataStr);
+            }
+
+            if (currentBuildingNameStr && buildingsData[currentBuildingNameStr]) {
+                loadBuildingData(currentBuildingNameStr);
+            } else {
+                // 기존 단일 데이터 호환성 체크
+                const legacyDataStr = localStorage.getItem('mobileAppData');
+                if (legacyDataStr) {
+                    const data = JSON.parse(legacyDataStr);
+                    roomData = data.roomData || {};
+                    floorGrids = data.floorGrids || {};
+                    if (data.maxFloor) maxFloor = data.maxFloor;
+                }
+            }
+        }
+
+        // 기존 데이터 불러오기 (호환성 유지)
+        function loadData() {
+            const dataStr = localStorage.getItem('mobileAppData');
+            if (dataStr) {
+                const data = JSON.parse(dataStr);
+                roomData = data.roomData || {};
+                floorGrids = data.floorGrids || {};
+                showCustomAlert('데이터가 불러와졌습니다.');
+                renderGrid(currentFloor);
+            } else {
+                showCustomAlert('저장된 데이터가 없습니다.');
+            }
+        }
+
+        // 엑셀 내보내기
+        function exportToExcel() {
+            let csvContent = "층,호실명,상태,상호,연락처,소유자명,소유자전화,현재임대료,희망임대료,권리금,입주시기,용도,전용면적,공용면적,메모\n";
+
+            Object.values(roomData).forEach(room => {
+                const row = [
+                    room.floor,
+                    room.roomNumber,
+                    room.status,
+                    room.businessName,
+                    room.contactNumber,
+                    room.ownerName,
+                    room.ownerPhone,
+                    room.currentRent,
+                    room.desiredRent,
+                    room.keyMoney,
+                    room.moveInDate,
+                    room.purpose,
+                    room.exclusiveArea,
+                    room.commonArea,
+                    room.memo
+                ].map(field => `"${field || ''}"`).join(',');
+                csvContent += row + "\n";
+            });
+
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '임장데이터.csv';
+            link.click();
+        }
+
+        // 그리드 초기화
+        function resetGrid() {
+            if (confirm('모든 데이터가 삭제됩니다. 계속하시겠습니까?')) {
+                roomData = {};
+                floorGrids = {};
+                for (let i = 1; i <= maxFloor; i++) {
+                    floorGrids[i] = [
+                        {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
+                    ];
+                }
+                renderGrid(currentFloor);
+            }
+        }
+
+
+        // 페이지 복원 함수
+        function restoreCurrentPage() {
+            const savedPage = localStorage.getItem('currentPage') || 'Dashboard';
+
+            switch(savedPage) {
+                case 'Dashboard':
+                case 'Marketing': // 기존 Marketing 데이터 호환성
+                default:
+                    showDashboard();
+                    break;
+                case 'RealEstateStatus':
+                    showRealEstateStatus();
+                    break;
+                case 'Property':
+                    showProperty();
+                    break;
+                case 'Customer':
+                    showCustomer();
+                    break;
+                case 'Contract':
+                    showContract();
+                    break;
+            }
+        }
+
+        // DOM 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 저장된 페이지 복원
+            restoreCurrentPage();
+            // 폼 제출 이벤트
+            const roomForm = document.getElementById('roomForm');
+            if (roomForm) {
+                roomForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveRoomData();
+                });
+            }
+
+            // 모달 외부 클릭 시 닫기
+            const roomModal = document.getElementById('roomModal');
+            if (roomModal) {
+                roomModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal();
+                    }
+                });
+            }
+
+            // 윈도우 리사이즈 이벤트 (모바일 회전 대응)
+            window.addEventListener('resize', function() {
+                // 현재 부동산 현황 페이지가 활성화된 경우에만 그리드 재렌더링
+                if (document.getElementById('mobileAppPage').style.display === 'block') {
+                    setTimeout(() => {
+                        renderGrid(currentFloor);
+                    }, 100);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
