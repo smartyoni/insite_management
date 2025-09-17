@@ -625,6 +625,13 @@
             background: #059669;
         }
 
+        /* 임장모드 컨트롤 영역 */
+        .inspection-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         /* 조이스틱 컨트롤러 */
         .joystick-controller {
             display: flex;
@@ -678,6 +685,34 @@
             justify-content: center;
             color: #ccc;
             font-size: 12px;
+        }
+
+        /* 편집 버튼 */
+        .edit-btn {
+            background: #3b82f6;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .edit-btn:hover {
+            background: #2563eb;
+            border-color: #1d4ed8;
+        }
+
+        .edit-btn:disabled {
+            background: #9ca3af;
+            border-color: #6b7280;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         /* 선택된 그리드 스타일 */
@@ -865,7 +900,7 @@
         /* 그리드 */
         .room-grid {
             display: grid;
-            gap: 1px;
+            gap: 3px;
             justify-content: center;
             align-items: center;
             position: relative;
@@ -1131,6 +1166,28 @@
 
         .submit-btn {
             flex: 1;
+        }
+
+        /* 임장모드 편집 모달 */
+        .inspection-modal {
+            max-width: 400px;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #4b5563;
         }
 
 
@@ -1536,28 +1593,33 @@
                         <div class="current-floor" id="currentFloor">1층</div>
                         <div class="grid-controls">
                             <!-- 조이스틱 컨트롤러 (임장모드일 때만 표시) -->
-                            <div class="joystick-controller" id="joystickController" style="display: none;">
-                                <div class="joystick-row">
-                                    <button class="joystick-btn up" onclick="addRoomInDirection('up')" title="위쪽에 호실 추가">
-                                        <i class="fas fa-chevron-up"></i>
-                                    </button>
-                                </div>
-                                <div class="joystick-row">
-                                    <button class="joystick-btn left" onclick="addRoomInDirection('left')" title="왼쪽에 호실 추가">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </button>
-                                    <div class="joystick-center">
-                                        <i class="fas fa-crosshairs"></i>
+                            <div class="inspection-controls" id="inspectionControls" style="display: none;">
+                                <div class="joystick-controller">
+                                    <div class="joystick-row">
+                                        <button class="joystick-btn up" onclick="addRoomInDirection('up')" title="위쪽에 호실 추가">
+                                            <i class="fas fa-chevron-up"></i>
+                                        </button>
                                     </div>
-                                    <button class="joystick-btn right" onclick="addRoomInDirection('right')" title="오른쪽에 호실 추가">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </button>
+                                    <div class="joystick-row">
+                                        <button class="joystick-btn left" onclick="addRoomInDirection('left')" title="왼쪽에 호실 추가">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </button>
+                                        <div class="joystick-center">
+                                            <i class="fas fa-crosshairs"></i>
+                                        </div>
+                                        <button class="joystick-btn right" onclick="addRoomInDirection('right')" title="오른쪽에 호실 추가">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                    <div class="joystick-row">
+                                        <button class="joystick-btn down" onclick="addRoomInDirection('down')" title="아래쪽에 호실 추가">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="joystick-row">
-                                    <button class="joystick-btn down" onclick="addRoomInDirection('down')" title="아래쪽에 호실 추가">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                </div>
+                                <button class="edit-btn" id="editBtn" onclick="openInspectionEditModal()" title="선택된 호실 편집">
+                                    <i class="fas fa-edit"></i> 편집
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1682,6 +1744,43 @@
                 <div class="modal-buttons">
                     <button type="submit" class="submit-btn">저장</button>
                     <button type="button" class="delete-btn" onclick="deleteRoom()">호실 삭제</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 임장모드 편집 모달 -->
+    <div class="modal-overlay" id="inspectionEditModal" style="display: none;">
+        <div class="modal-content inspection-modal">
+            <div class="modal-header">
+                <h3 id="inspectionModalTitle">호실 정보 편집</h3>
+                <button class="close-btn" onclick="closeInspectionEditModal()">&times;</button>
+            </div>
+            <form id="inspectionEditForm" onsubmit="saveInspectionData(event)">
+                <div class="form-group">
+                    <label class="form-label">호실명</label>
+                    <input type="text" class="form-input" id="inspectionRoomName" placeholder="예: 101호">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">상태</label>
+                    <select class="form-input" id="inspectionStatus" onchange="handleStatusChange()">
+                        <option value="">선택하세요</option>
+                        <option value="vacant">공실</option>
+                        <option value="occupied">영업중</option>
+                        <option value="check-needed">확인필요</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">상호</label>
+                    <input type="text" class="form-input" id="inspectionBusinessName" placeholder="상호명 입력">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">연락처</label>
+                    <input type="text" class="form-input" id="inspectionContact" placeholder="연락처 입력">
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="submit-btn">저장</button>
+                    <button type="button" class="cancel-btn" onclick="closeInspectionEditModal()">취소</button>
                 </div>
             </form>
         </div>
@@ -1963,20 +2062,20 @@
         function toggleInspectionMode() {
             isInspectionMode = !isInspectionMode;
             const btn = document.getElementById('inspectionModeBtn');
-            const joystickController = document.getElementById('joystickController');
+            const inspectionControls = document.getElementById('inspectionControls');
 
             if (isInspectionMode) {
                 btn.classList.add('active');
                 btn.innerHTML = '<i class="fas fa-crosshairs"></i> 임장모드 ON';
-                if (joystickController) {
-                    joystickController.style.display = 'flex';
+                if (inspectionControls) {
+                    inspectionControls.style.display = 'flex';
                 }
                 showCustomAlert('임장모드가 활성화되었습니다.\n그리드를 선택한 후 조이스틱으로 호실을 추가하세요.');
             } else {
                 btn.classList.remove('active');
                 btn.innerHTML = '<i class="fas fa-crosshairs"></i> 임장모드';
-                if (joystickController) {
-                    joystickController.style.display = 'none';
+                if (inspectionControls) {
+                    inspectionControls.style.display = 'none';
                 }
                 clearSelectedCell();
                 showCustomAlert('임장모드가 비활성화되었습니다.');
@@ -2043,10 +2142,97 @@
             cell.classList.add('selected');
         }
 
-        // 간단한 호실 정보 모달 (임장모드용)
+        // 임장모드 편집 모달 열기
+        function openInspectionEditModal() {
+            if (!selectedCell) {
+                showCustomAlert('편집할 호실을 먼저 선택해주세요.');
+                return;
+            }
+
+            const modal = document.getElementById('inspectionEditModal');
+            const row = parseInt(selectedCell.dataset.row);
+            const col = parseInt(selectedCell.dataset.col);
+            const roomKey = `${currentFloor}-${selectedCell.dataset.room || `${row}-${col}`}`;
+
+            // 기존 데이터 로드
+            const data = roomData[roomKey] || {};
+
+            document.getElementById('inspectionRoomName').value = data.roomNumber || '';
+            document.getElementById('inspectionStatus').value = data.status || '';
+            document.getElementById('inspectionBusinessName').value = data.businessName || '';
+            document.getElementById('inspectionContact').value = data.contactNumber || '';
+
+            modal.style.display = 'block';
+        }
+
+        // 임장모드 편집 모달 닫기
+        function closeInspectionEditModal() {
+            const modal = document.getElementById('inspectionEditModal');
+            modal.style.display = 'none';
+        }
+
+        // 임장모드 데이터 저장
+        function saveInspectionData(event) {
+            event.preventDefault();
+
+            if (!selectedCell) return;
+
+            const row = parseInt(selectedCell.dataset.row);
+            const col = parseInt(selectedCell.dataset.col);
+            const roomName = document.getElementById('inspectionRoomName').value.trim();
+            const status = document.getElementById('inspectionStatus').value;
+            const businessName = document.getElementById('inspectionBusinessName').value.trim();
+            const contact = document.getElementById('inspectionContact').value.trim();
+
+            const roomKey = `${currentFloor}-${roomName || `${row}-${col}`}`;
+
+            // 데이터 저장
+            roomData[roomKey] = {
+                roomNumber: roomName,
+                status: status,
+                businessName: businessName,
+                contactNumber: contact,
+                floor: currentFloor
+            };
+
+            // 그리드 데이터 업데이트
+            const floorData = floorGrids[currentFloor];
+            const cellData = floorData.find(cell => cell.row === row && cell.col === col);
+            if (cellData) {
+                cellData.roomNumber = roomName;
+                cellData.data = roomData[roomKey];
+                cellData.type = 'room';
+            }
+
+            // 셀 업데이트
+            updateCell(selectedCell, roomData[roomKey]);
+
+            // 건물별 데이터 저장
+            saveBuildingData();
+
+            // 모달 닫기
+            closeInspectionEditModal();
+
+            showCustomAlert('호실 정보가 저장되었습니다.');
+        }
+
+        // 상태 변경 처리
+        function handleStatusChange() {
+            const statusSelect = document.getElementById('inspectionStatus');
+            const businessNameInput = document.getElementById('inspectionBusinessName');
+
+            // 영업중을 선택하면 상호 입력란으로 커서 이동
+            if (statusSelect.value === 'occupied') {
+                setTimeout(() => {
+                    businessNameInput.focus();
+                }, 100);
+            }
+        }
+
+        // 간단한 호실 정보 모달 (임장모드용) - 길게 누르기용
         function openSimpleRoomModal(cell) {
-            // 임시로 기존 모달 사용 (추후 간단 모달 구현)
-            openRoomModal(cell);
+            selectCell(cell);
+            openInspectionEditModal();
         }
 
         // 건물 데이터 로드
@@ -2173,8 +2359,8 @@
 
             // 모바일 환경 감지
             const isMobile = window.innerWidth <= 768;
-            const rowHeight = isMobile ? '27px' : '32px';
-            const colWidth = isMobile ? '52px' : '62px';
+            const rowHeight = isMobile ? '40px' : '48px';
+            const colWidth = isMobile ? '78px' : '93px';
 
             grid.style.gridTemplateRows = `repeat(${gridRows}, ${rowHeight})`;
             grid.style.gridTemplateColumns = `repeat(${gridCols}, ${colWidth})`;
@@ -2202,10 +2388,11 @@
                     cell.classList.add('empty');
                     cell.textContent = '빈 공간';
                 } else {
+                    // 호실명이 있으면 표시, 없으면 빈 문자열
                     if (cellData.roomNumber) {
                         cell.textContent = cellData.roomNumber;
                     } else {
-                        cell.textContent = '호실';
+                        cell.textContent = '';
                     }
                 }
 
@@ -2510,8 +2697,8 @@
                 cell.classList.add('check-needed');
             }
 
-            // 내용 업데이트
-            cell.textContent = data.roomNumber;
+            // 내용 업데이트 - 호실명만 표시
+            cell.textContent = data.roomNumber || '';
         }
 
         // 데이터 저장
