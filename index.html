@@ -625,6 +625,68 @@
             background: #059669;
         }
 
+        /* 조이스틱 컨트롤러 */
+        .joystick-controller {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .joystick-row {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .joystick-btn {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+            border: 2px solid #b0b0b0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #555;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .joystick-btn:hover {
+            background: linear-gradient(145deg, #e0e0e0, #c0c0c0);
+            transform: translateY(-1px);
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.25);
+        }
+
+        .joystick-btn:active {
+            background: linear-gradient(145deg, #c0c0c0, #a0a0a0);
+            transform: translateY(1px);
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .joystick-center {
+            width: 36px;
+            height: 36px;
+            background: radial-gradient(circle, #666, #333);
+            border: 2px solid #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        /* 선택된 그리드 스타일 */
+        .room-cell.selected {
+            border: 3px solid #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+            background: #f0fdf4;
+        }
+
         /* 임장앱 - 층별 네비게이션 */
         .floor-nav {
             background: white;
@@ -635,11 +697,48 @@
             border: 2px solid #e5e7eb;
         }
 
+        .floor-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
         .floor-nav h3 {
+            margin: 0;
             font-size: 16px;
             color: #333;
-            margin-bottom: 15px;
-            text-align: center;
+        }
+
+        .inspection-mode-btn {
+            background: #fbbf24;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #1f2937;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .inspection-mode-btn:hover {
+            background: #f59e0b;
+            border-color: #d97706;
+            color: white;
+        }
+
+        .inspection-mode-btn.active {
+            background: #d97706;
+            border-color: #b45309;
+            color: white;
+        }
+
+        .inspection-mode-btn.active:hover {
+            background: #b45309;
         }
 
         .floor-buttons {
@@ -732,78 +831,6 @@
             display: inline-block;
         }
 
-        /* 셀별 추가 버튼 */
-        .cell-add-btn {
-            position: absolute;
-            background: #f0f7ff;
-            border: 2px solid #2563eb;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            color: #2563eb;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: scale(0.8);
-            z-index: 10;
-        }
-
-        .room-cell-wrapper:hover .cell-add-btn {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .cell-add-btn:hover {
-            background: #2563eb;
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
-        }
-
-        .cell-add-btn.top {
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.8);
-        }
-
-        .cell-add-btn.bottom {
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.8);
-        }
-
-        .cell-add-btn.left {
-            left: -12px;
-            top: 50%;
-            transform: translateY(-50%) scale(0.8);
-        }
-
-        .cell-add-btn.right {
-            right: -12px;
-            top: 50%;
-            transform: translateY(-50%) scale(0.8);
-        }
-
-        .room-cell-wrapper:hover .cell-add-btn.top {
-            transform: translateX(-50%) scale(1);
-        }
-
-        .room-cell-wrapper:hover .cell-add-btn.bottom {
-            transform: translateX(-50%) scale(1);
-        }
-
-        .room-cell-wrapper:hover .cell-add-btn.left {
-            transform: translateY(-50%) scale(1);
-        }
-
-        .room-cell-wrapper:hover .cell-add-btn.right {
-            transform: translateY(-50%) scale(1);
-        }
 
         /* 그리드 컨테이너 래퍼 */
         .grid-container-wrapper {
@@ -849,8 +876,8 @@
         }
 
         .room-cell {
-            width: 60px;
-            height: 30px;
+            width: 90px;
+            height: 45px;
             border: 2px solid #dee2e6;
             border-radius: 8px;
             display: flex;
@@ -860,7 +887,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: #f8f9fa;
-            font-size: 10px;
+            font-size: 15px;
             text-align: center;
             position: relative;
         }
@@ -908,12 +935,12 @@
 
         .room-number {
             font-weight: 600;
-            font-size: 11px;
+            font-size: 16px;
         }
 
         .room-status {
-            font-size: 8px;
-            margin-top: 2px;
+            font-size: 12px;
+            margin-top: 3px;
         }
 
         /* 액션 버튼 */
@@ -1106,53 +1133,6 @@
             flex: 1;
         }
 
-        /* 방향 버튼 스타일 */
-        .direction-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            margin-top: 5px;
-        }
-
-        /* 방향 버튼을 포함한 form-group은 세로 레이아웃 유지 */
-        .form-group.direction-group {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .direction-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .direction-btn {
-            background: #f8f9fa;
-            border: 2px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #374151;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            min-width: 70px;
-            justify-content: center;
-        }
-
-        .direction-btn:hover {
-            background: #2563eb;
-            color: white;
-            border-color: #2563eb;
-        }
-
-        .direction-btn:active {
-            transform: scale(0.95);
-        }
 
         /* 하이라이트 애니메이션 */
         @keyframes highlight {
@@ -1319,9 +1299,9 @@
             }
 
             .room-cell {
-                width: 50px;
-                height: 25px;
-                font-size: 9px;
+                width: 75px;
+                height: 37px;
+                font-size: 13px;
             }
 
             .action-grid {
@@ -1532,7 +1512,12 @@
 
                 <!-- 층별 네비게이션 -->
                 <div class="floor-nav">
-                    <h3>층 선택</h3>
+                    <div class="floor-nav-header">
+                        <h3>층 선택</h3>
+                        <button class="inspection-mode-btn" id="inspectionModeBtn" onclick="toggleInspectionMode()">
+                            <i class="fas fa-crosshairs"></i> 임장모드
+                        </button>
+                    </div>
                     <div class="floor-buttons" id="floorButtons">
                         <button class="floor-btn active" data-floor="1">1층</button>
                         <button class="floor-btn" data-floor="2">2층</button>
@@ -1550,6 +1535,30 @@
                     <div class="grid-header">
                         <div class="current-floor" id="currentFloor">1층</div>
                         <div class="grid-controls">
+                            <!-- 조이스틱 컨트롤러 (임장모드일 때만 표시) -->
+                            <div class="joystick-controller" id="joystickController" style="display: none;">
+                                <div class="joystick-row">
+                                    <button class="joystick-btn up" onclick="addRoomInDirection('up')" title="위쪽에 호실 추가">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                </div>
+                                <div class="joystick-row">
+                                    <button class="joystick-btn left" onclick="addRoomInDirection('left')" title="왼쪽에 호실 추가">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <div class="joystick-center">
+                                        <i class="fas fa-crosshairs"></i>
+                                    </div>
+                                    <button class="joystick-btn right" onclick="addRoomInDirection('right')" title="오른쪽에 호실 추가">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="joystick-row">
+                                    <button class="joystick-btn down" onclick="addRoomInDirection('down')" title="아래쪽에 호실 추가">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1669,30 +1678,6 @@
                     <textarea class="form-textarea" id="memo" placeholder="추가 정보를 입력하세요"></textarea>
                 </div>
 
-                <!-- 호실 추가 영역 -->
-                <div class="form-group direction-group">
-                    <label class="form-label">인접 호실 추가</label>
-                    <div class="direction-buttons">
-                        <div class="direction-row">
-                            <button type="button" class="direction-btn" onclick="addRoomFromModal('up')">
-                                <i class="fas fa-arrow-up"></i> 위
-                            </button>
-                        </div>
-                        <div class="direction-row">
-                            <button type="button" class="direction-btn" onclick="addRoomFromModal('left')">
-                                <i class="fas fa-arrow-left"></i> 왼쪽
-                            </button>
-                            <button type="button" class="direction-btn" onclick="addRoomFromModal('right')">
-                                <i class="fas fa-arrow-right"></i> 오른쪽
-                            </button>
-                        </div>
-                        <div class="direction-row">
-                            <button type="button" class="direction-btn" onclick="addRoomFromModal('down')">
-                                <i class="fas fa-arrow-down"></i> 아래
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="modal-buttons">
                     <button type="submit" class="submit-btn">저장</button>
@@ -1818,6 +1803,8 @@
         let maxFloor = 5;
         let currentBuildingName = '';
         let buildingsData = {}; // 건물별 데이터 저장 {건물명: {roomData, floorGrids, maxFloor}}
+        let isInspectionMode = false; // 임장모드 상태
+        let selectedCell = null; // 선택된 그리드 셀
 
         // 건물 저장
         function saveCurrentBuilding() {
@@ -1972,6 +1959,96 @@
             modal.style.display = 'none';
         }
 
+        // 임장모드 토글
+        function toggleInspectionMode() {
+            isInspectionMode = !isInspectionMode;
+            const btn = document.getElementById('inspectionModeBtn');
+            const joystickController = document.getElementById('joystickController');
+
+            if (isInspectionMode) {
+                btn.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-crosshairs"></i> 임장모드 ON';
+                if (joystickController) {
+                    joystickController.style.display = 'flex';
+                }
+                showCustomAlert('임장모드가 활성화되었습니다.\n그리드를 선택한 후 조이스틱으로 호실을 추가하세요.');
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '<i class="fas fa-crosshairs"></i> 임장모드';
+                if (joystickController) {
+                    joystickController.style.display = 'none';
+                }
+                clearSelectedCell();
+                showCustomAlert('임장모드가 비활성화되었습니다.');
+            }
+
+            // 그리드 다시 렌더링
+            renderGrid(currentFloor);
+        }
+
+        // 선택된 셀 초기화
+        function clearSelectedCell() {
+            if (selectedCell) {
+                selectedCell.classList.remove('selected');
+                selectedCell = null;
+            }
+        }
+
+        // 조이스틱으로 호실 추가
+        function addRoomInDirection(direction) {
+            if (!isInspectionMode || !selectedCell) {
+                showCustomAlert('그리드를 먼저 선택해주세요.');
+                return;
+            }
+
+            const row = parseInt(selectedCell.dataset.row);
+            const col = parseInt(selectedCell.dataset.col);
+
+            // 기존 addCellAt 함수 활용
+            addCellAt(row, col, direction);
+
+            // 새로 추가된 셀을 자동 선택
+            setTimeout(() => {
+                let newRow = row, newCol = col;
+                switch(direction) {
+                    case 'up': newRow = row - 1; break;
+                    case 'down': newRow = row + 1; break;
+                    case 'left': newCol = col - 1; break;
+                    case 'right': newCol = col + 1; break;
+                }
+
+                const newCell = document.querySelector(`[data-row="${newRow}"][data-col="${newCol}"].room-cell`);
+                if (newCell) {
+                    selectCell(newCell);
+                }
+            }, 200);
+        }
+
+        // 셀 클릭 처리
+        function handleCellClick(cell) {
+            if (isInspectionMode) {
+                selectCell(cell);
+            } else {
+                openRoomModal(cell);
+            }
+        }
+
+        // 셀 선택
+        function selectCell(cell) {
+            // 기존 선택 해제
+            clearSelectedCell();
+
+            // 새 셀 선택
+            selectedCell = cell;
+            cell.classList.add('selected');
+        }
+
+        // 간단한 호실 정보 모달 (임장모드용)
+        function openSimpleRoomModal(cell) {
+            // 임시로 기존 모달 사용 (추후 간단 모달 구현)
+            openRoomModal(cell);
+        }
+
         // 건물 데이터 로드
         function loadBuildingData(buildingName) {
             if (buildingsData[buildingName]) {
@@ -2124,9 +2201,7 @@
                 if (cellData.type === 'empty') {
                     cell.classList.add('empty');
                     cell.textContent = '빈 공간';
-                    cell.onclick = () => openRoomModal(cell); // 빈 공간도 클릭해서 새 호실 추가 가능
                 } else {
-                    cell.onclick = () => openRoomModal(cell);
                     if (cellData.roomNumber) {
                         cell.textContent = cellData.roomNumber;
                     } else {
@@ -2134,28 +2209,29 @@
                     }
                 }
 
+                // 클릭 이벤트 처리
+                cell.onclick = () => handleCellClick(cell);
+
+                // 길게 누르기 이벤트 (모바일)
+                let longPressTimer;
+                cell.addEventListener('touchstart', (e) => {
+                    longPressTimer = setTimeout(() => {
+                        if (isInspectionMode) {
+                            openSimpleRoomModal(cell);
+                        }
+                    }, 800); // 800ms 길게 누르기
+                });
+
+                cell.addEventListener('touchend', () => {
+                    clearTimeout(longPressTimer);
+                });
+
+                cell.addEventListener('touchmove', () => {
+                    clearTimeout(longPressTimer);
+                });
+
                 wrapper.appendChild(cell);
 
-                // 방향 버튼들 추가
-                const directions = ['top', 'bottom', 'left', 'right'];
-                const directionMap = {
-                    'top': 'up',
-                    'bottom': 'down',
-                    'left': 'left',
-                    'right': 'right'
-                };
-
-                directions.forEach(dir => {
-                    const btn = document.createElement('button');
-                    btn.className = `cell-add-btn ${dir}`;
-                    btn.textContent = '+';
-                    btn.title = `${dir === 'top' ? '위' : dir === 'bottom' ? '아래' : dir === 'left' ? '왼쪽' : '오른쪽'}쪽에 호실 추가`;
-                    btn.onclick = (e) => {
-                        e.stopPropagation();
-                        addCellAt(cellData.row, cellData.col, directionMap[dir]);
-                    };
-                    wrapper.appendChild(btn);
-                });
 
                 grid.appendChild(wrapper);
             });
@@ -2250,24 +2326,6 @@
             }
         }
 
-        // 모달에서 호실 추가
-        function addRoomFromModal(direction) {
-            if (!currentEditingCell) return;
-
-            const row = parseInt(currentEditingCell.dataset.row);
-            const col = parseInt(currentEditingCell.dataset.col);
-
-            // 현재 모달의 데이터 저장 (추가 전에)
-            if (document.getElementById('roomNumber').value) {
-                saveRoomData();
-            }
-
-            // 새 호실 추가
-            addCellAt(row, col, direction);
-
-            // 모달 닫기
-            closeModal();
-        }
 
         // 호실 삭제
         function deleteRoom() {
