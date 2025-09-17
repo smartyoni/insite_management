@@ -35,8 +35,9 @@
             margin: 0 auto;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            height: 60px;
+            justify-content: flex-start;
+            height: 50px;
+            gap: 40px;
         }
 
         .logo h1 {
@@ -71,12 +72,6 @@
             border: 1px solid #2563eb;
         }
 
-        .notification-icon {
-            font-size: 18px;
-            color: #666;
-            cursor: pointer;
-            padding: 8px;
-        }
 
         /* 메인 컨텐츠 */
         .main {
@@ -475,29 +470,24 @@
             font-size: 20px;
         }
 
-        .building-list-btn {
-            background: #f8f9fa;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 13px;
-            color: #374151;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .building-list-btn:hover {
-            background: #e5e7eb;
-            border-color: #d1d5db;
-        }
 
         .building-input {
             display: flex;
             gap: 10px;
             align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .building-input h2 {
+            margin: 0;
+            color: #333;
+            font-size: 20px;
+            white-space: nowrap;
+        }
+
+        .floor-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
         }
 
         .building-name-input {
@@ -582,7 +572,7 @@
 
         .building-actions {
             display: flex;
-            gap: 8px;
+            gap: 4px;
         }
 
         .building-delete-btn {
@@ -748,16 +738,17 @@
         .inspection-mode-btn {
             background: #fbbf24;
             border: 2px solid #f59e0b;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 13px;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 12px;
             color: #1f2937;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .inspection-mode-btn:hover {
@@ -778,21 +769,22 @@
 
         .floor-buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
         }
 
         .floor-btn {
             background: #f8f9fa;
             border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 12px 8px;
-            font-size: 14px;
+            border-radius: 6px;
+            padding: 8px 4px;
+            font-size: 13px;
             font-weight: 600;
             color: #666;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
+            min-height: 35px;
         }
 
         .floor-btn:hover {
@@ -822,6 +814,12 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+        }
+
+        .grid-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .current-floor {
@@ -991,6 +989,12 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+        }
+
+        .action-grid-single {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
 
         .action-btn {
@@ -1190,6 +1194,153 @@
             background: #4b5563;
         }
 
+        /* 건물목록 페이지 */
+        .buildings-page {
+            padding: 0;
+            height: calc(100vh - 54px); /* 헤더 높이 + border 제외 */
+            overflow: hidden;
+            margin: 0;
+            margin-top: -54px;
+            padding-top: 54px;
+        }
+
+        .buildings-table-container.full-screen {
+            background: white;
+            height: 100%;
+            margin: 0;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .buildings-table-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 건물목록 스크롤바 스타일 */
+        .buildings-table-wrapper::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        .buildings-table-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+
+        .buildings-table-wrapper::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 6px;
+        }
+
+        .buildings-table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+
+        #buildingsTable {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px; /* 최소 너비 보장 */
+        }
+
+        #buildingsTable th {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        #buildingsTable td {
+            padding: 4px 8px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        #buildingsTable tr:hover {
+            background: #f8f9fa;
+        }
+
+        #buildingsTable .building-name-link {
+            color: #2563eb;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        #buildingsTable .building-name-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        .building-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .building-action-btn {
+            padding: 3px 6px;
+            border: none;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .building-action-btn.edit {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .building-action-btn.edit:hover {
+            background: #2563eb;
+        }
+
+        .building-action-btn.delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .building-action-btn.delete:hover {
+            background: #dc2626;
+        }
+
+        .status-badge {
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-occupied {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-vacant {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-check {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
 
         /* 하이라이트 애니메이션 */
         @keyframes highlight {
@@ -1263,7 +1414,179 @@
             }
         }
 
+        /* 앱 레이아웃 */
+        .app-layout {
+            display: flex;
+            height: calc(100vh - 54px);
+            gap: 0;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 2px solid #e5e7eb;
+            padding: 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .sidebar-section:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-section h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .building-input {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .building-input h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .building-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .building-input-row .building-name-input {
+            flex: 1;
+        }
+
+        .building-input-row .save-building-btn {
+            padding: 8px 12px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .action-buttons-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .action-btn-sidebar {
+            background: #f8f9fa;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .action-btn-sidebar:hover {
+            background: #e3f2fd;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .action-btn-sidebar.primary {
+            background: #2563eb;
+            border-color: #1d4ed8;
+            color: white;
+        }
+
+        .action-btn-sidebar.primary:hover {
+            background: #1d4ed8;
+        }
+
+        .action-buttons-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn-half {
+            flex: 1;
+            background: #f8f9fa;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .action-btn-half:hover {
+            background: #e3f2fd;
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* 메인 콘텐츠 영역 */
+        .main-content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+
+        .main-content-area .grid-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .main-content-area .grid-container-wrapper {
+            flex: 1;
+            overflow: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
         @media (max-width: 768px) {
+            /* 모바일에서는 기존 레이아웃 유지 */
+            .app-layout {
+                display: block;
+                height: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #e5e7eb;
+                padding: 15px;
+            }
+
+            .sidebar-section {
+                margin-bottom: 15px;
+                padding-bottom: 15px;
+            }
+
+            .main-content-area {
+                background: white;
+            }
+
+            .main-content-area .grid-container {
+                padding: 15px;
+            }
+
             .header-container {
                 flex-direction: column;
                 height: auto;
@@ -1325,13 +1648,14 @@
             }
 
             .floor-buttons {
-                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-                gap: 8px;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 6px;
             }
 
             .floor-btn {
-                padding: 10px 4px;
+                padding: 8px 2px;
                 font-size: 12px;
+                min-height: 32px;
             }
 
             .mobile-container {
@@ -1369,6 +1693,15 @@
                 border-top: 1px solid #e5e7eb;
             }
 
+            .action-grid-single {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+                margin: 0 -15px;
+                padding: 15px;
+                background: #f8f9fa;
+                border-top: 1px solid #e5e7eb;
+            }
+
             .action-btn {
                 padding: 12px;
                 font-size: 14px;
@@ -1386,12 +1719,9 @@
             <nav class="nav">
                 <a href="#" class="nav-item active" onclick="showDashboard()">대시보드</a>
                 <a href="#" class="nav-item" onclick="showRealEstateStatus()">매물임장</a>
-                <a href="#" class="nav-item" onclick="showProperty()">매물</a>
+                <a href="#" class="nav-item" onclick="showProperty()">건물목록</a>
                 <a href="#" class="nav-item" onclick="showCustomer()">고객</a>
             </nav>
-            <div class="header-right">
-                <i class="fas fa-bell notification-icon"></i>
-            </div>
         </div>
     </header>
 
@@ -1550,47 +1880,59 @@
 
         <!-- 임장앱 페이지 -->
         <div class="page" id="mobileAppPage" style="display: none;">
-            <div class="mobile-container">
-                <!-- 건물 정보 -->
-                <div class="building-info">
-                    <div class="building-header">
-                        <h2>매물임장</h2>
-                        <button class="building-list-btn" onclick="showBuildingList()">
-                            <i class="fas fa-list"></i> 건물 목록
-                        </button>
+            <div class="app-layout">
+                <!-- 사이드바 -->
+                <div class="sidebar">
+                    <!-- 건물명 입력 -->
+                    <div class="sidebar-section">
+                        <div class="building-input">
+                            <h3>건물명</h3>
+                            <div class="building-input-row">
+                                <input type="text" id="buildingName" placeholder="건물명을 입력하세요" class="building-name-input">
+                                <button class="save-building-btn" onclick="saveCurrentBuilding()">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="building-input">
-                        <input type="text" id="buildingName" placeholder="건물명을 입력하세요" class="building-name-input">
-                        <button class="save-building-btn" onclick="saveCurrentBuilding()">
-                            <i class="fas fa-save"></i> 저장
-                        </button>
+
+                    <!-- 층 선택 -->
+                    <div class="sidebar-section">
+                        <div class="floor-nav-header">
+                            <h3>층 선택</h3>
+                        </div>
+                        <div class="floor-buttons" id="floorButtons">
+                            <button class="floor-btn active" data-floor="1">1층</button>
+                            <button class="floor-btn" data-floor="2">2층</button>
+                            <button class="floor-btn" data-floor="3">3층</button>
+                            <button class="floor-btn" data-floor="4">4층</button>
+                            <button class="floor-btn" data-floor="5">5층</button>
+                        </div>
+                        <div style="margin-top: 15px; text-align: center;">
+                            <button class="control-btn" onclick="addFloor()">+ 층 추가</button>
+                        </div>
+                    </div>
+
+                    <!-- 액션 버튼 -->
+                    <div class="sidebar-section">
+                        <h3>작업</h3>
+                        <div class="action-buttons-row">
+                            <button class="action-btn-half" onclick="saveData()">💾 저장</button>
+                            <button class="action-btn-half" onclick="resetGrid()">🔄 초기화</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 층별 네비게이션 -->
-                <div class="floor-nav">
-                    <div class="floor-nav-header">
-                        <h3>층 선택</h3>
-                        <button class="inspection-mode-btn" id="inspectionModeBtn" onclick="toggleInspectionMode()">
-                            <i class="fas fa-crosshairs"></i> 임장모드
-                        </button>
-                    </div>
-                    <div class="floor-buttons" id="floorButtons">
-                        <button class="floor-btn active" data-floor="1">1층</button>
-                        <button class="floor-btn" data-floor="2">2층</button>
-                        <button class="floor-btn" data-floor="3">3층</button>
-                        <button class="floor-btn" data-floor="4">4층</button>
-                        <button class="floor-btn" data-floor="5">5층</button>
-                    </div>
-                    <div style="margin-top: 15px; text-align: center;">
-                        <button class="control-btn" onclick="addFloor()">+ 층 추가</button>
-                    </div>
-                </div>
-
-                <!-- 그리드 컨테이너 -->
-                <div class="grid-container">
+                <!-- 메인 그리드 영역 -->
+                <div class="main-content-area">
+                    <div class="grid-container">
                     <div class="grid-header">
-                        <div class="current-floor" id="currentFloor">1층</div>
+                        <div class="grid-header-left">
+                            <div class="current-floor" id="currentFloor">1층</div>
+                            <button class="inspection-mode-btn" id="inspectionModeBtn" onclick="toggleInspectionMode()">
+                                <i class="fas fa-crosshairs"></i> 임장모드
+                            </button>
+                        </div>
                         <div class="grid-controls">
                             <!-- 조이스틱 컨트롤러 (임장모드일 때만 표시) -->
                             <div class="inspection-controls" id="inspectionControls" style="display: none;">
@@ -1631,16 +1973,31 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- 액션 버튼 -->
-                <div class="action-buttons">
-                    <div class="action-grid">
-                        <button class="action-btn" onclick="saveData()">💾 저장</button>
-                        <button class="action-btn" onclick="loadData()">📂 불러오기</button>
-                        <button class="action-btn primary" onclick="exportToExcel()">📊 엑셀 내보내기</button>
-                        <button class="action-btn" onclick="resetGrid()">🔄 초기화</button>
-                    </div>
                 </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 건물목록 페이지 -->
+    <main id="buildingListPage" class="main-content buildings-page" style="display: none;">
+        <div class="buildings-table-container full-screen">
+            <div class="buildings-table-wrapper">
+                <table id="buildingsTable">
+                    <thead>
+                        <tr>
+                            <th>건물명</th>
+                            <th>층수</th>
+                            <th>호실수</th>
+                            <th>영업중</th>
+                            <th>공실</th>
+                            <th>확인필요</th>
+                            <th>작업</th>
+                        </tr>
+                    </thead>
+                    <tbody id="buildingsTableBody">
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
@@ -1847,9 +2204,18 @@
         }
 
         function showProperty() {
+            // 모든 페이지 숨기기
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('mobileAppPage').style.display = 'none';
+            document.getElementById('buildingListPage').style.display = 'block';
+
+            // 네비게이션 활성화 상태 변경
+            setActiveTab('Property');
             // 현재 페이지 저장
             localStorage.setItem('currentPage', 'Property');
-            alert('매물 관리 페이지 준비 중입니다.');
+
+            // 건물목록 데이터 로드
+            loadBuildingListData();
         }
 
         function showCustomer() {
@@ -1923,11 +2289,29 @@
 
             currentBuildingName = buildingName;
 
-            // 로컬스토리지에 건물 데이터 저장
+            // 전체 건물 데이터를 localStorage에 저장
             localStorage.setItem('buildingsData', JSON.stringify(buildingsData));
-            localStorage.setItem('currentBuildingName', buildingName);
+            localStorage.setItem('currentBuildingName', currentBuildingName);
 
             showCustomAlert(`"${buildingName}" 건물이 저장되었습니다.`);
+        }
+
+        // 현재 건물 데이터를 자동 저장하는 함수
+        function saveBuildingData() {
+            const buildingName = document.getElementById('buildingName').value.trim();
+
+            if (buildingName && currentBuildingName) {
+                // 현재 건물 데이터 업데이트
+                buildingsData[currentBuildingName] = {
+                    roomData: { ...roomData },
+                    floorGrids: { ...floorGrids },
+                    maxFloor: maxFloor
+                };
+
+                // localStorage에 저장
+                localStorage.setItem('buildingsData', JSON.stringify(buildingsData));
+                localStorage.setItem('currentBuildingName', currentBuildingName);
+            }
         }
 
         // 건물 목록 표시
@@ -2574,6 +2958,9 @@
                 {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
             ];
 
+            // 건물 데이터 저장
+            saveBuildingData();
+
             showCustomAlert(`${maxFloor}층이 추가되었습니다.`);
         }
 
@@ -2674,8 +3061,8 @@
             // 셀 업데이트
             updateCell(currentEditingCell, roomData[key]);
 
-            // 자동 저장
-            saveData();
+            // 건물별 데이터 저장
+            saveBuildingData();
 
             closeModal();
         }
@@ -2703,11 +3090,26 @@
 
         // 데이터 저장
         function saveData() {
-            const dataStr = JSON.stringify({
-                roomData: roomData,
-                floorGrids: floorGrids
-            });
-            localStorage.setItem('mobileAppData', dataStr);
+            const buildingName = document.getElementById('buildingName').value.trim();
+
+            if (!buildingName) {
+                showCustomAlert('건물명을 입력해주세요.');
+                return;
+            }
+
+            // 현재 건물 데이터를 buildingsData에 저장
+            buildingsData[buildingName] = {
+                roomData: { ...roomData },
+                floorGrids: { ...floorGrids },
+                maxFloor: maxFloor
+            };
+
+            currentBuildingName = buildingName;
+
+            // 전체 건물 데이터를 localStorage에 저장
+            localStorage.setItem('buildingsData', JSON.stringify(buildingsData));
+            localStorage.setItem('currentBuildingName', currentBuildingName);
+
             showCustomAlert('데이터가 저장되었습니다.');
         }
 
@@ -2790,7 +3192,12 @@
                         {row: 5, col: 5, type: 'room', roomNumber: '', data: {}}
                     ];
                 }
+
+                // 건물 데이터 저장
+                saveBuildingData();
+
                 renderGrid(currentFloor);
+                showCustomAlert('그리드가 초기화되었습니다.');
             }
         }
 
@@ -2815,6 +3222,111 @@
                     showCustomer();
                     break;
             }
+        }
+
+        // 건물목록 데이터 로드
+        function loadBuildingListData() {
+            // 로컬스토리지에서 건물 데이터 불러오기
+            const buildingsDataStr = localStorage.getItem('buildingsData');
+            const buildings = buildingsDataStr ? JSON.parse(buildingsDataStr) : {};
+
+            renderBuildingsTable(buildings);
+        }
+
+        // 건물 테이블 렌더링
+        function renderBuildingsTable(buildings) {
+            const tableBody = document.getElementById('buildingsTableBody');
+            tableBody.innerHTML = '';
+
+            if (Object.keys(buildings).length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                            등록된 건물이 없습니다.<br>
+                            <button class="new-building-btn" onclick="createNewBuildingFromList()" style="margin-top: 10px;">
+                                <i class="fas fa-plus"></i> 첫 번째 건물 생성
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            Object.entries(buildings).forEach(([buildingName, buildingData]) => {
+                const stats = calculateBuildingStats(buildingData);
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td><strong><a href="#" onclick="openBuilding('${buildingName}')" class="building-name-link">${buildingName}</a></strong></td>
+                    <td>${buildingData.maxFloor || 5}층</td>
+                    <td>${stats.totalRooms}</td>
+                    <td><span class="status-badge status-occupied">${stats.occupied}</span></td>
+                    <td><span class="status-badge status-vacant">${stats.vacant}</span></td>
+                    <td><span class="status-badge status-check">${stats.checkNeeded}</span></td>
+                    <td>
+                        <div class="building-actions">
+                            <button class="building-action-btn edit" onclick="editBuilding('${buildingName}')">
+                                편집
+                            </button>
+                            <button class="building-action-btn delete" onclick="deleteBuildingFromList('${buildingName}')">
+                                삭제
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 건물 통계 계산
+        function calculateBuildingStats(buildingData) {
+            const stats = { totalRooms: 0, occupied: 0, vacant: 0, checkNeeded: 0 };
+
+            if (buildingData.roomData) {
+                const rooms = Object.values(buildingData.roomData);
+                stats.totalRooms = rooms.length;
+
+                rooms.forEach(room => {
+                    switch(room.status) {
+                        case 'occupied': stats.occupied++; break;
+                        case 'vacant': stats.vacant++; break;
+                        case 'check-needed': stats.checkNeeded++; break;
+                    }
+                });
+            }
+
+            return stats;
+        }
+
+        // 건물목록에서 새 건물 생성
+        function createNewBuildingFromList() {
+            showRealEstateStatus();
+            setTimeout(() => {
+                createNewBuilding();
+            }, 100);
+        }
+
+        // 건물 편집 (매물임장으로 이동)
+        function editBuilding(buildingName) {
+            loadBuildingData(buildingName);
+            showRealEstateStatus();
+        }
+
+        // 건물 열기 (건물목록에서 건물명 클릭 시)
+        function openBuilding(buildingName) {
+            loadBuildingData(buildingName);
+            showRealEstateStatus();
+            showCustomAlert(`"${buildingName}" 건물을 불러왔습니다.`);
+        }
+
+        // 건물목록에서 건물 삭제
+        function deleteBuildingFromList(buildingName) {
+            deleteBuildingFromMenu(buildingName);
+            // 테이블 새로고침
+            setTimeout(() => {
+                loadBuildingListData();
+            }, 100);
         }
 
         // DOM 로드 완료 후 실행
