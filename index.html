@@ -1872,17 +1872,31 @@
                         item.classList.add('active');
                     }
 
-                    item.innerHTML = `
-                        <div onclick="selectBuilding('${buildingName}')">
-                            <div class="building-name">${buildingName}</div>
-                            <div class="building-info-text">${building.maxFloor}층 • 호실 ${roomCount}개</div>
-                        </div>
-                        <div class="building-actions">
-                            <button class="building-delete-btn" onclick="deleteBuilding('${buildingName}')" title="삭제">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                    const selectDiv = document.createElement('div');
+                    selectDiv.onclick = () => selectBuilding(buildingName);
+                    selectDiv.style.cursor = 'pointer';
+                    selectDiv.style.flex = '1';
+
+                    selectDiv.innerHTML = `
+                        <div class="building-name">${buildingName}</div>
+                        <div class="building-info-text">${building.maxFloor}층 • 호실 ${roomCount}개</div>
                     `;
+
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'building-actions';
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'building-delete-btn';
+                    deleteBtn.title = '삭제';
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteBuilding(buildingName);
+                    };
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+
+                    actionsDiv.appendChild(deleteBtn);
+                    item.appendChild(selectDiv);
+                    item.appendChild(actionsDiv);
 
                     buildingList.appendChild(item);
                 });
