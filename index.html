@@ -1959,7 +1959,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <button class="edit-btn" id="editBtn" onclick="openInspectionEditModal()" title="선택된 호실 편집">
+                                <button class="edit-btn" id="editBtn" onclick="openInspectionEditModal()" title="선택된 호실 편집" style="display: none;">
                                     <i class="fas fa-edit"></i> 편집
                                 </button>
                             </div>
@@ -2454,12 +2454,22 @@
                 if (inspectionControls) {
                     inspectionControls.style.display = 'flex';
                 }
+                // 임장모드일 때 편집 버튼 활성화
+                const editBtn = document.getElementById('editBtn');
+                if (editBtn) {
+                    editBtn.style.display = 'block';
+                }
                 showCustomAlert('임장모드가 활성화되었습니다.\n그리드를 선택한 후 조이스틱으로 호실을 추가하세요.');
             } else {
                 btn.classList.remove('active');
                 btn.innerHTML = '<i class="fas fa-crosshairs"></i> 임장모드';
                 if (inspectionControls) {
                     inspectionControls.style.display = 'none';
+                }
+                // 임장모드가 아닐 때 편집 버튼 숨김
+                const editBtn = document.getElementById('editBtn');
+                if (editBtn) {
+                    editBtn.style.display = 'none';
                 }
                 clearSelectedCell();
                 showCustomAlert('임장모드가 비활성화되었습니다.');
@@ -2509,6 +2519,7 @@
 
         // 셀 클릭 처리
         function handleCellClick(cell) {
+            // 임장모드일 때는 셀 선택만, 일반 모드일 때는 모달 열기
             if (isInspectionMode) {
                 selectCell(cell);
             } else {
@@ -2528,6 +2539,12 @@
 
         // 임장모드 편집 모달 열기
         function openInspectionEditModal() {
+            // 임장모드 확인
+            if (!isInspectionMode) {
+                showCustomAlert('임장모드를 먼저 활성화해주세요.');
+                return;
+            }
+
             if (!selectedCell) {
                 showCustomAlert('편집할 호실을 먼저 선택해주세요.');
                 return;
